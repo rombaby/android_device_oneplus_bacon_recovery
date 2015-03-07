@@ -11,11 +11,13 @@ USE_CAMERA_STUB := true
 TARGET_NO_BOOTLOADER := true
 TARGET_BOOTLOADER_BOARD_NAME := msm8974
 
-# Platform
+#Platform
 TARGET_BOARD_PLATFORM := msm8974
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
 
-# Architecture
+#Architecture
+TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
 TARGET_ARCH := arm
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
@@ -24,7 +26,7 @@ TARGET_CPU_VARIANT := krait
 TARGET_CPU_SMP := true
 ARCH_ARM_HAVE_TLS_REGISTER := true
 
-# Kernel
+#Kernel
 #BOARD_CUSTOM_BOOTIMG_MK := device/oneplus/bacon/mkbootimg.mk
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=bacon user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
 BOARD_KERNEL_BASE := 0x00000000
@@ -37,12 +39,12 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 0x105c0000
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x105c0000
 BOARD_FLASH_BLOCK_SIZE := 131072
 
-# dt.img
+#dt.img
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --tags_offset 0x01e00000 --dt device/oneplus/bacon/dt.img
 TARGET_PREBUILT_KERNEL := device/oneplus/bacon/kernel
 
-# Recovery
+#Recovery
 TARGET_RECOVERY_FSTAB := device/oneplus/bacon/rootdir/etc/fstab.bacon
 TARGET_OTA_ASSERT_DEVICE := bacon,A0001
 TARGET_WCNSS_MAC_PREFIX := e8bba8
@@ -51,13 +53,14 @@ TARGET_WCNSS_MAC_PREFIX := e8bba8
 #BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"fontcn46_28x73.h\"
 
-#分辨率
+#Screen
 DEVICE_RESOLUTION := 1080x1920
 TARGET_SCREEN_WIDTH := 1080
 TARGET_SCREEN_HEIGHT := 1920
 
-#RGB制式
+#Pixel Format
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_565″
+BOARD_EGL_CFG := device/oneplus/bacon/configs/egl.cfg
 
 #Ext4
 BOARD_USES_MMCUTILS := true
@@ -67,7 +70,7 @@ TARGET_USERIMAGES_USE_F2FS := true
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 
-#touch滑动
+#Touch Swipe
 BOARD_RECOVERY_SWIPE := true
 
 BOARD_HAS_NO_SELECT_BUTTON := true

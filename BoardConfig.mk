@@ -48,6 +48,9 @@ TARGET_PREBUILT_KERNEL := device/oneplus/bacon/kernel
 TARGET_RECOVERY_FSTAB := device/oneplus/bacon/rootdir/etc/fstab.bacon
 TARGET_OTA_ASSERT_DEVICE := bacon,A0001
 TARGET_WCNSS_MAC_PREFIX := e8bba8
+#RECOVERY_VARIANT := philz
+#RECOVERY_VARIANT := cwm
+#RECOVERY_VARIANT := twrp
 
 #Font
 #BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"

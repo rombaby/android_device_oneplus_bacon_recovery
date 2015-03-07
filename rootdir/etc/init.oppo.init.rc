@@ -1,0 +1,104 @@
+##################################################################################
+### VENDOR_EDIT, OPPO All rights reserved.
+### 
+### File: - init.oppo.init.nosd.rc
+### Author: Zhilong.Zhang@OnlineRd.Driver
+### 
+### ------------------------------- Revision History: ----------------------------
+### <author>                        <data>       <version>   <desc>
+### ------------------------------------------------------------------------------
+### Zhilong.Zhang@OnlineRd.Driver   2014-03-12               Create this file
+##################################################################################
+#ifdef VENDOR_EDIT
+#Zhilong.Zhang@OnlineRd.Driver, 2014/03/12, Modify for support different init rc
+on init
+    # Set permissions for persist partition
+    mkdir /persist 0771 system system
+    # See storage config details at http://source.android.com/tech/storage/
+    mkdir /mnt/shell/emulated 0700 shell shell
+    mkdir /storage 0150 system sdcard_r
+    mkdir /storage/emulated 0555 root root
+    mkdir /storage/emulated/legacy 0555 root root
+    #mkdir /storage/sdcard1 0000 system system
+
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    #export SECONDARY_STORAGE /storage/sdcard1
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
+#ifndef VENDOR_EDIT
+#Jason.Lee@OnLineRD.Framework, 2013/12/03, Remove for Qcom useless apk files
+    #export BOOTCLASSPATH ${BOOTCLASSPATH}:/system/framework/qcom.fmradio.jar
+#endif /* VENDOR_EDIT */
+
+    # Support legacy paths
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
+    symlink /storage/emulated/legacy /storage/sdcard0
+
+    #symlink /storage/sdcard0 /sdcard
+    #symlink /storage/sdcard0 /mnt/sdcard
+    #symlink /storage/sdcard1 /mnt/sdcard2
+
+#ifdef VENDOR_EDIT 
+#Zhilong.Zhang@OnlineRd.Driver, 2013/11/09, Add for support OTG device
+    mkdir /storage/UDiskA 0000 system system
+    symlink /storage/UDiskA /mnt/UDiskA
+    mkdir /storage/UDiskB 0000 system system
+    symlink /storage/UDiskB /mnt/UDiskB
+    mkdir /storage/UDiskC 0000 system system
+    symlink /storage/UDiskC /mnt/UDiskC
+    mkdir /storage/UDiskD 0000 system system
+    symlink /storage/UDiskD /mnt/UDiskD
+    mkdir /storage/UDiskE 0000 system system
+    symlink /storage/UDiskE /mnt/UDiskE
+    mkdir /storage/UDiskF 0000 system system
+    symlink /storage/UDiskF /mnt/UDiskF                    
+#endif /* VENDOR_EDIT */
+
+#endif /* VENDOR_EDIT */
+
+#ifdef VENDOR_EDIT
+#Peirs@OnLineRD.framework.sd_mount_umount, 2013.11.15, remove to change sd umount logic to android 4.1 to solve sd mount and umount fail problem
+on post-fs
+    # once everything is setup, no need to modify /
+    mount rootfs rootfs / ro remount
+    # mount shared so changes propagate into child namespaces
+    mount rootfs rootfs / shared rec
+    mount tmpfs tmpfs /mnt/secure private rec
+
+    # We chown/chmod /cache again so because mount is run as root + defaults
+    chown system cache /cache
+    chmod 0770 /cache
+    # We restorecon /cache in case the cache partition has been reset.
+    restorecon /cache
+
+    # This may have been created by the recovery system with odd permissions
+    chown system cache /cache/recovery
+    chmod 0770 /cache/recovery
+    # This may have been created by the recovery system with the wrong context.
+    restorecon /cache/recovery
+
+    #change permissions on vmallocinfo so we can grab it from bugreports
+    chown root log /proc/vmallocinfo
+    chmod 0440 /proc/vmallocinfo
+
+    chown root log /proc/slabinfo
+    chmod 0440 /proc/slabinfo
+
+    #change permissions on kmsg & sysrq-trigger so bugreports can grab kthread stacks
+    chown root system /proc/kmsg
+    chmod 0440 /proc/kmsg
+    chown root system /proc/sysrq-trigger
+    chmod 0220 /proc/sysrq-trigger
+    chown system log /proc/last_kmsg
+    chmod 0440 /proc/last_kmsg
+
+    # create the lost+found directories, so as to enforce our permissions
+    mkdir /cache/lost+found 0770 root root
+#endif
+
+#ifdef VENDOR_EDIT 
+#Zhilong.Zhang@OnlineRd.Driver, 2014/01/23, Add this service
+service sdcard /system/bin/sdcard /data/media /mnt/shell/emulated 1023 1023
+    class late_start
+#endif /* VENDOR_EDIT */

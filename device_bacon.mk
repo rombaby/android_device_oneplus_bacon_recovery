@@ -14,6 +14,13 @@ else
 	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
 
+# Ramdisk
+PRODUCT_PACKAGES += \
+    fstab.qcom \
+    init.qcom.rc \
+    init.qcom.usb.rc \
+    ueventd.qcom.rc
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
 

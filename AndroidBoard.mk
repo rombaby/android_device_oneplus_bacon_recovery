@@ -1,3 +1,5 @@
+$(shell mkdir -p $(OUT)/obj/KERNEL_OBJ/usr/include)
+
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)

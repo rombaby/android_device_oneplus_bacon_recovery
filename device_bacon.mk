@@ -7,12 +7,20 @@ $(call inherit-product-if-exists, vendor/oneplus/bacon/bacon-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/oneplus/bacon/overlay
 
-
+LOCAL_PATH := device/oneplus/bacon
 ifeq ($(TARGET_PREBUILT_KERNEL),)
 	LOCAL_KERNEL := device/oneplus/bacon/kernel
 else
 	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
+
+# Ramdisk
+PRODUCT_PACKAGES += \
+    libinit_bacon \
+    fstab.bacon \
+    init.bacon.rc \
+    init.qcom.usb.rc \
+    ueventd.bacon.rc
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
@@ -20,5 +28,16 @@ PRODUCT_COPY_FILES += \
 $(call inherit-product, build/target/product/full.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
+PRODUCT_COPY_FILES_OVERRIDES += \
+    root/fstab.goldfish \
+    root/init.goldfish.rc \
+    recovery/root/fstab.goldfish 
+    
+# Set insecure for root access and device specifics
+ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=0 \
+ro.allow.mock.location=1 \
+ro.debuggable=1 \
+ro.adb.secure=0 \
+
 PRODUCT_NAME := full_bacon
 PRODUCT_DEVICE := bacon
